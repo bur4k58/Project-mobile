@@ -1,4 +1,4 @@
-package com.example.project_mobile.activity
+package com.example.project_mobile.b.activity
 
 import android.animation.ObjectAnimator
 import android.content.Intent
