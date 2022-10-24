@@ -9,7 +9,7 @@ data class Toilet(
     val district : String,
     val doelgroep : String,
     val luiertafel : String,
-    val latitude : String,
-    val longitude : String,
+    val lat : String,
+    val long : String,
     val integraal_toegankelijk : String
 )
