@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".b.activity.MapActivity">
+    tools:context=".activity.MapActivity">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
+        app:itemIconTint="@color/black"
         android:verticalScrollbarPosition="defaultPosition"
         app:itemBackground="@android:color/white"
         app:itemTextColor="@android:color/black"
