@@ -2,7 +2,6 @@ package com.example.project_mobile.data
 
 
 data class Attributes (
-
 	val ID : Int,
 	val OMSCHRIJVING : String,
 	val STRAAT : String,
@@ -13,5 +12,7 @@ data class Attributes (
 	val LUIERTAFEL : String,
 	val LAT : String,
 	val LONG : String,
-	val INTEGRAAL_TOEGANKELIJK : String
+	val INTEGRAAL_TOEGANKELIJK : String,
+	val x : Double,
+	val y : Double
 )
