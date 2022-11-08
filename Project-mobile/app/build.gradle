@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.google.android.gms:play-services:+'
     implementation 'com.squareup.retrofit2:retrofit:2.7.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
@@ -45,4 +46,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation 'com.google.code.gson:gson:2.10'
+    implementation 'org.osmdroid:osmdroid-android:6.1.11'
+    implementation 'com.beust:klaxon:5.6'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
