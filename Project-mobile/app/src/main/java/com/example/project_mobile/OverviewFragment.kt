@@ -84,7 +84,7 @@ class OverviewFragment : Fragment(){
                 val gson = GsonBuilder().create()
                 val toilet = gson.fromJson(body, JsonBase::class.java)
                 for(i in 0 until toilet.features.size){
-                    attributesList.add(i, toilet.features.get(i).attributes)
+                    attributesList.add(i, Attributes(toilet.features.get(i).attributes.ID,toilet.features.get(i).attributes.OMSCHRIJVING,toilet.features.get(i).attributes.STRAAT,toilet.features.get(i).attributes.HUISNUMMER,toilet.features.get(i).attributes.POSTCODE,toilet.features.get(i).attributes.DISTRICT,toilet.features.get(i).attributes.DOELGROEP,toilet.features.get(i).attributes.LUIERTAFEL,toilet.features.get(i).attributes.LAT,toilet.features.get(i).attributes.LONG,toilet.features.get(i).attributes.INTEGRAAL_TOEGANKELIJK,toilet.features.get(i).geometry.x,toilet.features.get(i).geometry.y))
                 }
                 adapter = OverviewAdapter(attributesList, lastKnownLocation)
             }
