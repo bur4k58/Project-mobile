@@ -84,7 +84,7 @@ class OverviewFragment : Fragment(){
                 val gson = GsonBuilder().create()
                 val toilet = gson.fromJson(body, JsonBase::class.java)
                 for(i in 0 until toilet.features.size){
-                    attributesList.add(i, toilet.features.get(i).attributes)
+                    attributesList.add(i, Attributes(toilet.features.get(i).attributes.ID,toilet.features.get(i).attributes.OMSCHRIJVING,toilet.features.get(i).attributes.STRAAT,toilet.features.get(i).attributes.HUISNUMMER,toilet.features.get(i).attributes.POSTCODE,toilet.features.get(i).attributes.DISTRICT,toilet.features.get(i).attributes.DOELGROEP,toilet.features.get(i).attributes.LUIERTAFEL,toilet.features.get(i).attributes.LAT,toilet.features.get(i).attributes.LONG,toilet.features.get(i).attributes.INTEGRAAL_TOEGANKELIJK,toilet.features.get(i).geometry.x,toilet.features.get(i).geometry.y))
                 }
                 adapter = OverviewAdapter(attributesList, lastKnownLocation)
             }
@@ -92,12 +92,14 @@ class OverviewFragment : Fragment(){
                 println("Get json fail")
             }
         })
+        println("returning list")
         return attributesList
     }
 
     fun setAdapter(attributesList: MutableList<Attributes>) {
         adapter = OverviewAdapter(attributesList, lastKnownLocation)
         recyclerView.adapter = adapter
+        println(adapter.itemCount)
     }
 
     private fun intialiseViews(view: View){
@@ -110,7 +112,7 @@ class OverviewFragment : Fragment(){
     fun addEventHandlers(){
         filterMen.setOnClickListener {
             if(filterMen.isChecked){
-                list = attributesList.filter {x -> x.DOELGROEP == "man/vrouw"}
+                list = attributesList.filter {x -> x.DOELGROEP == "man/vrouw" || x.DOELGROEP == "man"}
                 adapter = OverviewAdapter(list, lastKnownLocation)
                 recyclerView.adapter = adapter
             } else {
@@ -120,7 +122,7 @@ class OverviewFragment : Fragment(){
         }
         filterWoman.setOnClickListener {
             if(filterWoman.isChecked){
-                list = attributesList.filter { x -> x.DOELGROEP == "man/vrouw" }
+                list = attributesList.filter { x -> x.DOELGROEP == "man/vrouw" || x.DOELGROEP == "vrouw" }
                 adapter = OverviewAdapter(list, lastKnownLocation)
                 recyclerView.adapter = adapter
             } else {
