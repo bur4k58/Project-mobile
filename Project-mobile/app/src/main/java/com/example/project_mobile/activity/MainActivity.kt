@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, OverviewFragment()).commit()
-/*        getToiletsJson()*/
 
         //Bottom navigation
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navi)
@@ -33,24 +32,4 @@ class MainActivity : AppCompatActivity() {
             false
         })
     }
-    /*fun getToiletsJson() {
-        println("attempting to get JSON")
-        val url = "https://geodata.antwerpen.be/arcgissql/rest/services/P_Portal/portal_publiek1/MapServer/8/query?where=1%3D1&outFields=ID,OMSCHRIJVING,STRAAT,HUISNUMMER,POSTCODE,DISTRICT,DOELGROEP,LUIERTAFEL,LAT,LONG,INTEGRAAL_TOEGANKELIJK&outSR=4326&f=json"
-        val request = Request.Builder().url(url).build()
-        val client = OkHttpClient()
-        client.newCall(request).enqueue(object: Callback {
-            override fun onResponse(call: Call, response: Response) {
-                val body= response?.body?.string()
-                println(body)
-                val gson = GsonBuilder().create()
-                val toilet = gson.fromJson(body, JsonBase::class.java)
-                for(i in 0 until toilet.features.size){
-                    println("\nItem nr: ${i}\nXY: ${toilet.features.get(i).geometry}\nDetails: \n${toilet.features.get(i).attributes}\n--------------------\n")
-                }
-            }
-            override fun onFailure(call: Call, e: IOException) {
-                println("Get json fail")
-            }
-        })
-    }*/
 }

@@ -151,7 +151,7 @@ class MapActivity : AppCompatActivity() {
         }
         mMapView?.overlays?.add(MapEventsOverlay(mReceive))
 
-        mMapView?.controller?.setZoom(24.0)
+        mMapView?.controller?.setZoom(20.0)
         setCenter(GeoPoint(51.21989 , 4.40346), "Antwerpen")
     }
 
