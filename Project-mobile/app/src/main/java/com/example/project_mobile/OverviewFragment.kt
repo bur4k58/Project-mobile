@@ -92,12 +92,14 @@ class OverviewFragment : Fragment(){
                 println("Get json fail")
             }
         })
+        println("returning list")
         return attributesList
     }
 
     fun setAdapter(attributesList: MutableList<Attributes>) {
         adapter = OverviewAdapter(attributesList, lastKnownLocation)
         recyclerView.adapter = adapter
+        println(adapter.itemCount)
     }
 
     private fun intialiseViews(view: View){
@@ -110,7 +112,7 @@ class OverviewFragment : Fragment(){
     fun addEventHandlers(){
         filterMen.setOnClickListener {
             if(filterMen.isChecked){
-                list = attributesList.filter {x -> x.DOELGROEP == "man/vrouw"}
+                list = attributesList.filter {x -> x.DOELGROEP == "man/vrouw" || x.DOELGROEP == "man"}
                 adapter = OverviewAdapter(list, lastKnownLocation)
                 recyclerView.adapter = adapter
             } else {
@@ -120,7 +122,7 @@ class OverviewFragment : Fragment(){
         }
         filterWoman.setOnClickListener {
             if(filterWoman.isChecked){
-                list = attributesList.filter { x -> x.DOELGROEP == "man/vrouw" }
+                list = attributesList.filter { x -> x.DOELGROEP == "man/vrouw" || x.DOELGROEP == "vrouw" }
                 adapter = OverviewAdapter(list, lastKnownLocation)
                 recyclerView.adapter = adapter
             } else {
