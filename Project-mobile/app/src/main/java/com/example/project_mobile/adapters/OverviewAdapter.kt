@@ -33,8 +33,13 @@ class OverviewAdapter(private val dataSet: List<Attributes>, private val locatio
         val attributes: Attributes = dataSet[position]
 
         viewHolder.textOmschrijving.text = attributes.OMSCHRIJVING
-        stringBuilder.append(attributes.DISTRICT + " ")
-        stringBuilder.append(attributes.POSTCODE.toString())
+        if(attributes.DISTRICT != null){
+            stringBuilder.append(attributes.DISTRICT + " ")
+        }
+        if(attributes.POSTCODE != 0){
+            stringBuilder.append(attributes.POSTCODE.toString())
+        }
+
         viewHolder.textDistrict.text = stringBuilder
         viewHolder.textStraat.text = attributes.STRAAT
 

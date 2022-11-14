@@ -125,6 +125,7 @@ class MapActivity : AppCompatActivity() {
 
     private fun hasPermissions(): Boolean {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -155,7 +156,7 @@ class MapActivity : AppCompatActivity() {
         }
         mMapView?.overlays?.add(MapEventsOverlay(mReceive))
 
-        mMapView?.controller?.setZoom(25.0)
+        mMapView?.controller?.setZoom(24.0)
         setCenter(GeoPoint(51.21989 , 4.40346), "Antwerpen")
     }
 
