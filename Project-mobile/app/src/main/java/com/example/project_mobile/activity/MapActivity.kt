@@ -75,32 +75,28 @@ class MapActivity : AppCompatActivity() {
             getAddressOrLocation(url)
         }
 
-/*
-        initMap()
-*/
-
         clearButton = findViewById(R.id.clear_button)
         clearButton?.setOnClickListener {
             mMapView?.overlays?.clear()
             // Redraw map
             mMapView?.invalidate()
-
-            // Permissions
-            if (hasPermissions()) {
-                initMap()
-            }
-            else {
-                ActivityCompat.requestPermissions(this, arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION), 100)
-            }
-            // Notifications
-            notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            mChannel = NotificationChannel("my_channel_01","My Channel", NotificationManager.IMPORTANCE_HIGH)
-            mChannel?.setShowBadge(true)
-
-            notificationManager?.createNotificationChannel(mChannel!!)
         }
+
+        // Permissions
+        if (hasPermissions()) {
+            initMap()
+        }
+        else {
+            ActivityCompat.requestPermissions(this, arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION), 100)
+        }
+        // Notifications
+        notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        mChannel = NotificationChannel("my_channel_01","My Channel", NotificationManager.IMPORTANCE_HIGH)
+        mChannel?.setShowBadge(true)
+
+        notificationManager?.createNotificationChannel(mChannel!!)
 
         //Bottom navigation
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navi)
@@ -124,8 +120,7 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun hasPermissions(): Boolean {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
