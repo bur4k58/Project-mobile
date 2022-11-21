@@ -21,8 +21,6 @@ import com.example.project_mobile.data.Attributes
 import com.example.project_mobile.data.JsonBase
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.GsonBuilder
@@ -90,15 +88,15 @@ class OverviewFragment : Fragment(){
             if(it.value != null)
             {
                 val itr = it.children?.iterator()
+                var test=0
                 println("----------------------------------------------")
-                if (itr != null) {
-                    while (itr.hasNext()) {
-                        val key = itr.next()
-                        val toilet = key.value
-                        val i = key.key
-                        println("${key.value}")
-                        //attributesList.add(i, Attributes(toilet.features.get(i).attributes.ID,toilet.features.get(i).attributes.OMSCHRIJVING,toilet.features.get(i).attributes.STRAAT,toilet.features.get(i).attributes.HUISNUMMER,toilet.features.get(i).attributes.POSTCODE,toilet.features.get(i).attributes.DISTRICT,toilet.features.get(i).attributes.DOELGROEP,toilet.features.get(i).attributes.LUIERTAFEL,toilet.features.get(i).attributes.LAT,toilet.features.get(i).attributes.LONG,toilet.features.get(i).attributes.INTEGRAAL_TOEGANKELIJK,toilet.features.get(i).geometry.x,toilet.features.get(i).geometry.y))
+                for (jobSnapshot in it.getChildren())
+                {
+                    val toilet: Attributes? = jobSnapshot.getValue(Attributes::class.java)
+                    if (toilet != null) {
+                        attributesList.add(test, Attributes(toilet.ID,toilet.OMSCHRIJVING,toilet.STRAAT,toilet.HUISNUMMER,toilet.POSTCODE,toilet.DISTRICT,toilet.DOELGROEP,toilet.LUIERTAFEL,toilet.LAT,toilet.LONG,toilet.INTEGRAAL_TOEGANKELIJK,toilet.x,toilet.y))
                     }
+                    test++
                 }
             }
             else{
