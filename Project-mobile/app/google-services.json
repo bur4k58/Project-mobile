@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "165059427646",
+    "firebase_url": "https://aptoiletproject-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "aptoiletproject",
+    "storage_bucket": "aptoiletproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165059427646:android:464220ba6987e52973806f",
+        "android_client_info": {
+          "package_name": "com.example.project_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165059427646-60revn2u3nei7e4oo7jaenib6jcojfid.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXCvTIL3lVcd1sO2Huxw5QYtYhiJoJ49Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165059427646-60revn2u3nei7e4oo7jaenib6jcojfid.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
