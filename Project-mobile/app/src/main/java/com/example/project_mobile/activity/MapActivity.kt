@@ -24,8 +24,16 @@ import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
 import com.example.project_mobile.R
+import com.example.project_mobile.adapters.OverviewAdapter
+import com.example.project_mobile.data.Attributes
+import com.example.project_mobile.data.JsonBase
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.google.gson.GsonBuilder
+import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -39,6 +47,7 @@ import org.osmdroid.views.overlay.ItemizedOverlay
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import java.io.File
+import java.io.IOException
 import java.net.URL
 import java.net.URLEncoder
 import java.util.ArrayList
@@ -153,12 +162,32 @@ class MapActivity : AppCompatActivity() {
 
         mMapView?.controller?.setZoom(20.0)
         setCenter(GeoPoint(51.21989 , 4.40346), "Antwerpen")
+        val database = Firebase.database
+        addMarkerDB(database)
+
+
+    }
+    private fun addMarkerDB(database: FirebaseDatabase)
+    {
+        database.getReference("toilets").get().addOnSuccessListener {
+            if(it.value != null)
+            {
+                for (jobSnapshot in it.getChildren())
+                {
+                    val toilet: Attributes? = jobSnapshot.getValue(Attributes::class.java)
+                    if (toilet != null) {
+                        addMarker(GeoPoint(toilet.y,toilet.x),toilet.STRAAT.toString())
+                    }
+                }
+            }
+        }
     }
 
     private fun addMarker(geoPoint: GeoPoint, name: String) {
         items.add(OverlayItem(name, name, geoPoint))
         mMyLocationOverlay = ItemizedIconOverlay(items, null, applicationContext)
         mMapView?.overlays?.add(mMyLocationOverlay)
+        mMapView.invalidate();
     }
 
     private fun setCenter(geoPoint: GeoPoint, name: String) {
