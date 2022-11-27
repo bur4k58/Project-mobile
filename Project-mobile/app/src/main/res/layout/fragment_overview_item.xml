@@ -47,7 +47,7 @@
         android:contentDescription="Distance"
         app:layout_constraintBottom_toBottomOf="@+id/textStraat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintHorizontal_bias="0.664"
         app:layout_constraintStart_toEndOf="@+id/textStraat"
         app:srcCompat="@drawable/ic_baseline_location_on_24" />
 
