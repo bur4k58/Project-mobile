@@ -42,10 +42,8 @@ import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.ItemizedIconOverlay
-import org.osmdroid.views.overlay.ItemizedOverlay
-import org.osmdroid.views.overlay.MapEventsOverlay
-import org.osmdroid.views.overlay.OverlayItem
+import org.osmdroid.views.overlay.*
+import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow
 import java.io.File
 import java.io.IOException
 import java.net.URL
@@ -176,11 +174,40 @@ class MapActivity : AppCompatActivity() {
                 {
                     val toilet: Attributes? = jobSnapshot.getValue(Attributes::class.java)
                     if (toilet != null) {
-                        addMarker(GeoPoint(toilet.y,toilet.x),toilet.STRAAT.toString())
+                        val geoPoint = GeoPoint(toilet.y,toilet.x)
+                        val startMarker = Marker(mMapView)
+                        startMarker.position = geoPoint
+                        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                        startMarker.title= "${toilet.STRAAT} ${toilet.HUISNUMMER} \n${toilet.DOELGROEP}"
+                        if (toilet.LUIERTAFEL=="ja") {
+                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_baby_changing_station_24));
+                        }
+                        else if (toilet.INTEGRAAL_TOEGANKELIJK=="ja") {
+                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_wheelchair_pickup_24));
+                        }
+                        else if (toilet.DOELGROEP=="man") {
+                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_man_24));
+                        }
+                        else if (toilet.DOELGROEP=="man/vrouw") {
+                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_family_restroom_24));
+                        }
+                        else if (toilet.DOELGROEP=="man") {
+                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_man_24));
+                        }
+                        // 3 null markers, thanks antwerpen
+                        else{
+                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_man_24));
+                        }
+                        addMarkerIcon(startMarker,toilet.STRAAT.toString())
                     }
                 }
             }
         }
+    }
+
+    private fun addMarkerIcon(startMarker: Marker, name: String) {
+        mMapView?.overlays?.add(startMarker)
+        mMapView.invalidate();
     }
 
     private fun addMarker(geoPoint: GeoPoint, name: String) {
