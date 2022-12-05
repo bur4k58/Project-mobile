@@ -107,6 +107,7 @@ class MapActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION), 100)
         }
+
         // Notifications
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         mChannel = NotificationChannel("my_channel_01","My Channel", NotificationManager.IMPORTANCE_HIGH)
