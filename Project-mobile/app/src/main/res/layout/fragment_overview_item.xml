@@ -43,19 +43,20 @@
         android:id="@+id/imageDistance"
         android:layout_width="19dp"
         android:layout_height="19dp"
+        android:layout_marginTop="105dp"
+        android:layout_marginEnd="70dp"
         android:layout_marginBottom="4dp"
         android:contentDescription="Distance"
         app:layout_constraintBottom_toBottomOf="@+id/textStraat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.664"
-        app:layout_constraintStart_toEndOf="@+id/textStraat"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_location_on_24" />
 
     <TextView
         android:id="@+id/textDistance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageDistance"
         app:layout_constraintEnd_toEndOf="parent"

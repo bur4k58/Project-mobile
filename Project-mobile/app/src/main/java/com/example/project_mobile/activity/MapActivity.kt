@@ -1,6 +1,7 @@
 package com.example.project_mobile.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationRequest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -28,6 +30,12 @@ import com.example.project_mobile.adapters.OverviewAdapter
 import com.example.project_mobile.data.Attributes
 import com.example.project_mobile.data.JsonBase
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
@@ -42,10 +50,8 @@ import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.ItemizedIconOverlay
-import org.osmdroid.views.overlay.ItemizedOverlay
-import org.osmdroid.views.overlay.MapEventsOverlay
-import org.osmdroid.views.overlay.OverlayItem
+import org.osmdroid.views.overlay.*
+import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow
 import java.io.File
 import java.io.IOException
 import java.net.URL
@@ -62,6 +68,7 @@ class MapActivity : AppCompatActivity() {
     private val urlNominatim = "https://nominatim.openstreetmap.org/"
     private var notificationManager: NotificationManager? = null
     private var mChannel: NotificationChannel? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,6 +107,7 @@ class MapActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION), 100)
         }
+
         // Notifications
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         mChannel = NotificationChannel("my_channel_01","My Channel", NotificationManager.IMPORTANCE_HIGH)
@@ -144,6 +152,7 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun initMap() {
         mMapView?.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
         // add receiver to get location from tap
@@ -161,10 +170,25 @@ class MapActivity : AppCompatActivity() {
         mMapView?.overlays?.add(MapEventsOverlay(mReceive))
 
         mMapView?.controller?.setZoom(20.0)
-        setCenter(GeoPoint(51.21989 , 4.40346), "Antwerpen")
-        val database = Firebase.database
-        addMarkerDB(database)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+
+        fusedLocationClient.getCurrentLocation(LocationRequest.QUALITY_HIGH_ACCURACY, object : CancellationToken() {
+            override fun onCanceledRequested(p0: OnTokenCanceledListener) = CancellationTokenSource().token
+
+            override fun isCancellationRequested() = false
+        })
+            .addOnSuccessListener { location: Location? ->
+                if (location == null)
+                    Toast.makeText(this, "Cannot get location.", Toast.LENGTH_SHORT).show()
+                else {
+                    val lat = location.latitude
+                    val lon = location.longitude
+                    setCenter(GeoPoint(lat,lon), "Uw locatie")
+                    val database = Firebase.database
+                    addMarkerDB(database)
+                }
+            }
 
     }
     private fun addMarkerDB(database: FirebaseDatabase)
@@ -176,11 +200,40 @@ class MapActivity : AppCompatActivity() {
                 {
                     val toilet: Attributes? = jobSnapshot.getValue(Attributes::class.java)
                     if (toilet != null) {
-                        addMarker(GeoPoint(toilet.y,toilet.x),toilet.STRAAT.toString())
+                        val geoPoint = GeoPoint(toilet.y,toilet.x)
+                        val startMarker = Marker(mMapView)
+                        startMarker.position = geoPoint
+                        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                        startMarker.title= "${toilet.STRAAT} ${toilet.HUISNUMMER} \n${toilet.DOELGROEP}"
+                        if (toilet.LUIERTAFEL=="ja") {
+                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_baby_changing_station_24));
+                        }
+                        else if (toilet.INTEGRAAL_TOEGANKELIJK=="ja") {
+                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_wheelchair_pickup_24));
+                        }
+                        else if (toilet.DOELGROEP=="man") {
+                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_man_24));
+                        }
+                        else if (toilet.DOELGROEP=="man/vrouw") {
+                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_family_restroom_24));
+                        }
+                        else if (toilet.DOELGROEP=="man") {
+                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_man_24));
+                        }
+                        // 3 null markers, thanks antwerpen
+                        else{
+                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_man_24));
+                        }
+                        addMarkerIcon(startMarker,toilet.STRAAT.toString())
                     }
                 }
             }
         }
+    }
+
+    private fun addMarkerIcon(startMarker: Marker, name: String) {
+        mMapView?.overlays?.add(startMarker)
+        mMapView.invalidate();
     }
 
     private fun addMarker(geoPoint: GeoPoint, name: String) {
