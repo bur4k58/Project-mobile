@@ -172,7 +172,6 @@ class MapActivity : AppCompatActivity() {
         mMapView?.controller?.setZoom(20.0)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-
         fusedLocationClient.getCurrentLocation(LocationRequest.QUALITY_HIGH_ACCURACY, object : CancellationToken() {
             override fun onCanceledRequested(p0: OnTokenCanceledListener) = CancellationTokenSource().token
 
@@ -210,9 +209,6 @@ class MapActivity : AppCompatActivity() {
                         }
                         else if (toilet.INTEGRAAL_TOEGANKELIJK=="ja") {
                             startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_wheelchair_pickup_24));
-                        }
-                        else if (toilet.DOELGROEP=="man") {
-                            startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_man_24));
                         }
                         else if (toilet.DOELGROEP=="man/vrouw") {
                             startMarker.setIcon(getResources().getDrawable(R.drawable.ic_baseline_family_restroom_24));
