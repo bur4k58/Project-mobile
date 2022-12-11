@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.project_mobile.OverviewFragment
 import com.example.project_mobile.R
+import com.example.project_mobile.data.Attributes
 import com.example.project_mobile.data.JsonBase
+import com.example.project_mobile.utility.Utility
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -17,7 +19,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, OverviewFragment()).commit()
+
+        val list = if (intent.extras != null) intent.getSerializableExtra("dataList") as MutableList<Attributes> else Utility().getAttributesList()
+
+        val overviewFragment = OverviewFragment(list)
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, overviewFragment).commit()
 
         //Bottom navigation
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navi)
@@ -26,7 +32,10 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.list -> return@OnNavigationItemSelectedListener true
                 R.id.map -> {
-                    startActivity(Intent(applicationContext, MapActivity::class.java))
+                    val mySuperIntent = Intent(applicationContext, MapActivity::class.java)
+                    mySuperIntent.action = Intent.ACTION_SEND
+                    mySuperIntent.putExtra("dataList", list as java.io.Serializable)
+                    startActivity(mySuperIntent)
                     overridePendingTransition(0, 0)
                     return@OnNavigationItemSelectedListener true
                 }

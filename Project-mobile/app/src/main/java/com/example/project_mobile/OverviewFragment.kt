@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project_mobile.adapters.OverviewAdapter
 import com.example.project_mobile.data.Attributes
 import com.example.project_mobile.data.JsonBase
+import com.example.project_mobile.utility.Utility
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.database.ktx.database
@@ -30,7 +31,7 @@ import okhttp3.Request
 import java.io.IOException
 
 
-class OverviewFragment : Fragment(){
+class OverviewFragment(private val mainList : MutableList<Attributes>) : Fragment(){
     private lateinit var attributesList: MutableList<Attributes>
     private lateinit var adapter: OverviewAdapter
     private lateinit var recyclerView: RecyclerView
@@ -57,7 +58,7 @@ class OverviewFragment : Fragment(){
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_overview, container, false)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
-        attributesList = ArrayList()
+        attributesList = mainList
         //initAdapter(view)
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -65,8 +66,7 @@ class OverviewFragment : Fragment(){
         lastKnownLocation = Location("")
         getLocationPermission()
 
-        getAttributesList()
-        setAdapter(getAttributesList())
+        setAdapter(mainList)
 
         recyclerView.adapter = adapter
 
@@ -76,7 +76,7 @@ class OverviewFragment : Fragment(){
         return view
     }
 
-    fun getAttributesList(): MutableList<Attributes> {
+    /*fun getAttributesList(): MutableList<Attributes> {
         println("attempting to get JSON")
         val url = "https://geodata.antwerpen.be/arcgissql/rest/services/P_Portal/portal_publiek1/MapServer/8/query?where=1%3D1&outFields=ID,OMSCHRIJVING,STRAAT,HUISNUMMER,POSTCODE,DISTRICT,DOELGROEP,LUIERTAFEL,LAT,LONG,INTEGRAAL_TOEGANKELIJK&outSR=4326&f=json"
         val request = Request.Builder().url(url).build()
@@ -118,7 +118,7 @@ class OverviewFragment : Fragment(){
             }
         }
         return attributesList
-    }
+    }*/
 
     fun setAdapter(attributesList: MutableList<Attributes>) {
         adapter = OverviewAdapter(attributesList, lastKnownLocation)
