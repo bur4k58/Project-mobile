@@ -40,7 +40,10 @@ class MainActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.form -> {
-                    startActivity(Intent(applicationContext, FormActivity::class.java))
+                    val mySuperIntent = Intent(applicationContext, FormActivity::class.java)
+                    mySuperIntent.action = Intent.ACTION_SEND
+                    mySuperIntent.putExtra("dataList", list as java.io.Serializable)
+                    startActivity(mySuperIntent)
                     overridePendingTransition(0, 0)
                     return@OnNavigationItemSelectedListener true
                 }

@@ -16,6 +16,7 @@ import com.example.project_mobile.R
 import com.example.project_mobile.adapters.OverviewAdapter
 import com.example.project_mobile.data.Attributes
 import com.example.project_mobile.data.JsonBase
+import com.example.project_mobile.utility.Utility
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -40,6 +41,7 @@ class FormActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
+        val list = if (intent.extras != null) intent.getSerializableExtra("dataList") as MutableList<Attributes> else Utility().getAttributesList()
 
         searchStreet = findViewById(R.id.naamStraat)
         searchDistrict = findViewById(R.id.naamDistrict)
@@ -62,12 +64,18 @@ class FormActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.form -> return@OnNavigationItemSelectedListener true
                 R.id.map -> {
-                    startActivity(Intent(applicationContext, MapActivity::class.java))
+                    val mySuperIntent = Intent(applicationContext, MapActivity::class.java)
+                    mySuperIntent.action = Intent.ACTION_SEND
+                    mySuperIntent.putExtra("dataList", list as java.io.Serializable)
+                    startActivity(mySuperIntent)
                     overridePendingTransition(0, 0)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.list -> {
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                    val mySuperIntent = Intent(applicationContext, MainActivity::class.java)
+                    mySuperIntent.action = Intent.ACTION_SEND
+                    mySuperIntent.putExtra("dataList", list as java.io.Serializable)
+                    startActivity(mySuperIntent)
                     overridePendingTransition(0, 0)
                     return@OnNavigationItemSelectedListener true
                 }
