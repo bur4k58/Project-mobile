@@ -45,6 +45,9 @@
             android:name=".activity.MainActivity"
             android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity
+            android:name=".activity.FormActivity"
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
+        <activity
             android:name=".activity.Splashscreen"
             android:theme="@style/Theme.Design.Light.NoActionBar"
             android:exported="true">
