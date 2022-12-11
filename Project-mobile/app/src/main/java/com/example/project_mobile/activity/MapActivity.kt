@@ -29,6 +29,7 @@ import com.example.project_mobile.R
 import com.example.project_mobile.adapters.OverviewAdapter
 import com.example.project_mobile.data.Attributes
 import com.example.project_mobile.data.JsonBase
+import com.example.project_mobile.utility.Utility
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationServices
@@ -72,6 +73,7 @@ class MapActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val list = if (intent.extras != null) intent.getSerializableExtra("dataList") as MutableList<Attributes> else Utility().getAttributesList()
 
         val osmConfig = Configuration.getInstance()
         osmConfig.userAgentValue = packageName
@@ -122,7 +124,10 @@ class MapActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.map -> return@OnNavigationItemSelectedListener true
                 R.id.list -> {
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                    val mySuperIntent = Intent(applicationContext, MainActivity::class.java)
+                    mySuperIntent.action = Intent.ACTION_SEND
+                    mySuperIntent.putExtra("dataList", list as java.io.Serializable)
+                    startActivity(mySuperIntent)
                     overridePendingTransition(0, 0)
                     return@OnNavigationItemSelectedListener true
                 }
